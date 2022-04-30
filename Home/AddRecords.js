@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Modal,
 } from "react-native";
 import uid from "uid";
 
@@ -24,6 +25,8 @@ const data = [
 
 const AddRecords = () => {
   const [aadhar, setaadhar] = useState("");
+  const [visible, setvisible] = useState(false);
+
   useEffect(() => {
     const datas = async () => {
       const data = await getDoc(
@@ -75,13 +78,14 @@ const AddRecords = () => {
   const [docs, setdocs] = useState();
   const [err, seterr] = useState();
   const [Rand, setRand] = useState();
-
+  const [Load, setLoad] = useState(false);
   const submit = () => {
     setRand(auth.currentUser.uid + Math.floor(Math.random() * 127212));
     DocumentPicker.getDocumentAsync().then((document) => {
       if (document.mimeType === "application/pdf") {
         setdocs(document.uri);
         console.log(document.uri);
+        setvisible(true);
       } else {
         seterr("Please Select a Pdf");
       }
@@ -500,6 +504,66 @@ const AddRecords = () => {
           />
         </View>
       </View>
+      <Modal transparent visible={visible}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <View
+            style={{
+              width: "80%",
+              backgroundColor: "#fff",
+              paddingVertical: 30,
+              paddingHorizontal: 20,
+            }}
+          >
+            <View style={{ alignItems: "center" }}>
+              <View
+                style={{
+                  width: "100%",
+
+                  alignItems: "flex-end",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => {
+                    setvisible(false);
+                  }}
+                >
+                  <Entypo name="cross" size={50} color="black" />
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  alignItems: "center",
+                }}
+              >
+                <AntDesign name="checkcircle" size={150} color="#2ecc71" />
+                <LottieView
+                  autoPlay
+                  source={require("../../Animations/52058-check.json")}
+                />
+              </View>
+
+              <Text
+                style={{
+                  alignItems: "center",
+                  marginVertical: 30,
+                  fontSize: 20,
+                  fontFamily: "OpanSans",
+                }}
+              >
+                You Joined Successfully!
+              </Text>
+            </View>
+          </View>
+        </View>
+      </Modal>
       <Dropdown
         style={[
           styles.dropdown,
