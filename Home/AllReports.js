@@ -9,9 +9,10 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
 import { auth, db } from "../Firebase/Firebase";
 const { height, width } = Dimensions.get("window");
-export default function AllReports(props) {
+export default function AllReports({ navigation }) {
   const [data, setdata] = useState([]);
   useEffect(() => {
     let dat = [];
@@ -36,18 +37,38 @@ export default function AllReports(props) {
     <View style={styles.container}>
       {data.map((data) => {
         return (
-          <TouchableOpacity style={styles.mainBox}>
+          <TouchableOpacity
+            style={styles.mainBox}
+            onPress={() => navigation.navigate("Details", { data: data })}
+            key={data.id}
+          >
             {/* <Image
               source={data.img}
               style={{ height: "100%", width: "30%" }}
             /> */}
-
-            <View>
-              <Text>Dr. {data.drLastname}</Text>
-              <Text style={{ color: "#999" }}>{data.description}</Text>
-              <Text style={{ marginTop: "auto", marginBottom: 5 }}>
-                Date OF Visit:{data.date}
-              </Text>
+            <View style={{ display: "flex", flexDirection: "row", margin: 10 }}>
+              <View style={{ width: "90%" }}>
+                <Text>Dr. {data.drLastname}</Text>
+                <Text style={{ color: "#999" }}>{data.description}</Text>
+                <Text style={{ marginTop: "auto", marginBottom: 5 }}>
+                  Date OF Visit:{data.Visiting_date}
+                </Text>
+              </View>
+              <View
+                style={{
+                  marginLeft: "auto",
+                  marginTop: "auto",
+                  marginBottom: "auto",
+                  width: 45,
+                  height: 45,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  display: "flex",
+                  borderWidth: 1,
+                }}
+              >
+                <AntDesign name="arrowright" size={24} color="black" />
+              </View>
             </View>
           </TouchableOpacity>
         );
@@ -58,7 +79,7 @@ export default function AllReports(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#caf0f8",
   },
   firstBox: {
     height: height * 0.4,

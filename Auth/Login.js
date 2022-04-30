@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Platform,
+  ImageBackground,
 } from "react-native";
 import {
   FirebaseRecaptchaVerifierModal,
@@ -38,6 +39,23 @@ export default function Login({ navigation }) {
 
   return (
     <View style={{ padding: 20, marginTop: 50 }}>
+      {message ? (
+        <TouchableOpacity
+          style={[StyleSheet.absoluteFill, { backgroundColor: 0xffffffee }]}
+          onPress={() => showMessage(undefined)}
+        >
+          <Text
+            style={{
+              color: message.color || "blue",
+              fontSize: 17,
+              textAlign: "center",
+              margin: 20,
+            }}
+          >
+            {message.text}
+          </Text>
+        </TouchableOpacity>
+      ) : undefined}
       <FirebaseRecaptchaVerifierModal
         ref={recaptchaVerifier}
         firebaseConfig={app.options}
@@ -46,7 +64,7 @@ export default function Login({ navigation }) {
       <Text style={{ marginTop: 20 }}>Enter phone number</Text>
       <TextInput
         style={{ marginVertical: 10, fontSize: 17 }}
-        placeholder="+91 999 999 9999"
+        placeholder="999 999 9999"
         autoFocus
         autoCompleteType="tel"
         keyboardType="phone-pad"
@@ -98,26 +116,7 @@ export default function Login({ navigation }) {
           }
         }}
       />
-      {message ? (
-        <TouchableOpacity
-          style={[
-            StyleSheet.absoluteFill,
-            { backgroundColor: 0xffffffee, justifyContent: "center" },
-          ]}
-          onPress={() => showMessage(undefined)}
-        >
-          <Text
-            style={{
-              color: message.color || "blue",
-              fontSize: 17,
-              textAlign: "center",
-              margin: 20,
-            }}
-          >
-            {message.text}
-          </Text>
-        </TouchableOpacity>
-      ) : undefined}
+
       <View
         style={{
           marginTop: 20,

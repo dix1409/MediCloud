@@ -5,7 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 
 import HomeScreen from "./HomeScreen";
 import Profile from "./Prof";
-import AllReports from "./AllReports";
+import AllReports from "./Add";
 import AddRecords from "./AddRecords";
 import LogOut from "./LogOut";
 

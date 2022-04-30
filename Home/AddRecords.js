@@ -8,8 +8,10 @@ import {
   ScrollView,
   Modal,
 } from "react-native";
-import uid from "uid";
+import LottieView from "lottie-react-native";
 
+import uid from "uid";
+import { Entypo } from "@expo/vector-icons";
 import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import * as DocumentPicker from "expo-document-picker";
@@ -78,7 +80,7 @@ const AddRecords = () => {
   const [docs, setdocs] = useState();
   const [err, seterr] = useState();
   const [Rand, setRand] = useState();
-  const [Load, setLoad] = useState(false);
+  const [Load, setLoad] = useState(true);
   const submit = () => {
     setRand(auth.currentUser.uid + Math.floor(Math.random() * 127212));
     DocumentPicker.getDocumentAsync().then((document) => {
@@ -92,6 +94,7 @@ const AddRecords = () => {
     });
   };
   const SendData = async () => {
+    setLoad(true);
     uploadimage(docs);
   };
   const uploadimage = async (uri) => {
@@ -237,6 +240,7 @@ const AddRecords = () => {
           });
         })
         .then(() => {
+          setLoad(false);
           console.log("Yupp");
         });
     } else if (value == "diabetes") {
@@ -308,6 +312,8 @@ const AddRecords = () => {
           });
         })
         .then(() => {
+          setLoad(false);
+
           console.log("Yupp");
         });
     } else if (value == "dengue") {
@@ -375,6 +381,8 @@ const AddRecords = () => {
           });
         })
         .then(() => {
+          setLoad(false);
+
           console.log("Yupp");
         });
     } else if (value == "cholesterol") {
@@ -442,6 +450,8 @@ const AddRecords = () => {
           });
         })
         .then(() => {
+          setLoad(false);
+
           console.log("Yupp");
         });
     }
@@ -449,402 +459,413 @@ const AddRecords = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.space}>
-        <Text style={{ color: "#334b91" }}>Doctor Name</Text>
-        <View style={{ display: "flex", flexDirection: "row" }}>
-          <View style={{ flex: 1 }}>
-            <TextInput
-              style={[styles.textInput, { width: "90%" }]}
-              onChangeText={(txt) => {
-                setdrFirst(txt);
-              }}
-              placeholder="First Name"
-            />
-          </View>
-          <View style={{ flex: 1 }}>
-            <TextInput
-              style={[styles.textInput, { width: "90%" }]}
-              onChangeText={(txt) => {
-                setdrLast(txt);
-              }}
-              placeholder="Last Name"
-            />
-          </View>
-        </View>
-        <View style={styles.space}>
-          <Text style={{ color: "#334b91" }}>Hospital Name</Text>
-
-          <TextInput
-            style={styles.textInput}
-            onChangeText={(txt) => {
-              setHName(txt);
-            }}
-          />
-        </View>
-        <View style={styles.space}>
-          <Text style={{ color: "#334b91" }}>Hospital City</Text>
-
-          <TextInput
-            style={styles.textInput}
-            onChangeText={(txt) => {
-              sethrCity(txt);
-            }}
-          />
-        </View>
-
-        <View style={styles.space}>
-          <Text style={{ color: "#334b91" }}>Visiting Date</Text>
-
-          <TextInput
-            style={styles.textInput}
-            onChangeText={(txt) => {
-              setVisitingDate(txt);
-            }}
-            dataDetectorTypes
-          />
-        </View>
-      </View>
-      <Modal transparent visible={visible}>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "rgba(0,0,0,0.5)",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <View
-            style={{
-              width: "80%",
-              backgroundColor: "#fff",
-              paddingVertical: 30,
-              paddingHorizontal: 20,
-            }}
-          >
-            <View style={{ alignItems: "center" }}>
-              <View
-                style={{
-                  width: "100%",
-
-                  alignItems: "flex-end",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() => {
-                    setvisible(false);
+      {!Load && (
+        <>
+          <View style={styles.space}>
+            <Text style={{ color: "#334b91" }}>Doctor Name</Text>
+            <View style={{ display: "flex", flexDirection: "row" }}>
+              <View style={{ flex: 1 }}>
+                <TextInput
+                  style={[styles.textInput, { width: "90%" }]}
+                  onChangeText={(txt) => {
+                    setdrFirst(txt);
                   }}
-                >
-                  <Entypo name="cross" size={50} color="black" />
-                </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  alignItems: "center",
-                }}
-              >
-                <AntDesign name="checkcircle" size={150} color="#2ecc71" />
-                <LottieView
-                  autoPlay
-                  source={require("../../Animations/52058-check.json")}
+                  placeholder="First Name"
                 />
               </View>
+              <View style={{ flex: 1 }}>
+                <TextInput
+                  style={[styles.textInput, { width: "90%" }]}
+                  onChangeText={(txt) => {
+                    setdrLast(txt);
+                  }}
+                  placeholder="Last Name"
+                />
+              </View>
+            </View>
+            <View style={styles.space}>
+              <Text style={{ color: "#334b91" }}>Hospital Name</Text>
 
-              <Text
-                style={{
-                  alignItems: "center",
-                  marginVertical: 30,
-                  fontSize: 20,
-                  fontFamily: "OpanSans",
+              <TextInput
+                style={styles.textInput}
+                onChangeText={(txt) => {
+                  setHName(txt);
                 }}
-              >
-                You Joined Successfully!
-              </Text>
+              />
+            </View>
+            <View style={styles.space}>
+              <Text style={{ color: "#334b91" }}>Hospital City</Text>
+
+              <TextInput
+                style={styles.textInput}
+                onChangeText={(txt) => {
+                  sethrCity(txt);
+                }}
+              />
+            </View>
+
+            <View style={styles.space}>
+              <Text style={{ color: "#334b91" }}>Visiting Date</Text>
+
+              <TextInput
+                style={styles.textInput}
+                onChangeText={(txt) => {
+                  setVisitingDate(txt);
+                }}
+                dataDetectorTypes
+              />
             </View>
           </View>
-        </View>
-      </Modal>
-      <Dropdown
-        style={[
-          styles.dropdown,
-          isFocus && { borderColor: "blue" },
-          styles.space,
-        ]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        // inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={data}
-        maxHeight={250}
-        labelField="label"
-        valueField="value"
-        placeholder={!isFocus ? "Select Disease" : "..."}
-        // searchPlaceholder="Search..."
-        value={value}
-        onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
-        onChange={(item) => {
-          setValue(item.value);
-          setIsFocus(false);
-        }}
-        renderLeftIcon={() => (
-          <AntDesign
-            style={styles.icon}
-            color={isFocus ? "blue" : "black"}
-            name="Safety"
-            size={20}
+          <Modal transparent visible={visible}>
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: "rgba(0,0,0,0.5)",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <View
+                style={{
+                  width: "80%",
+                  backgroundColor: "#fff",
+                  paddingVertical: 30,
+                  paddingHorizontal: 20,
+                }}
+              >
+                <View style={{ alignItems: "center" }}>
+                  <View
+                    style={{
+                      width: "100%",
+
+                      alignItems: "flex-end",
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    <TouchableOpacity
+                      onPress={() => {
+                        setvisible(false);
+                      }}
+                    >
+                      <Entypo name="cross" size={50} color="black" />
+                    </TouchableOpacity>
+                  </View>
+                  <View
+                    style={{
+                      alignItems: "center",
+                    }}
+                  >
+                    <AntDesign name="checkcircle" size={150} color="#2ecc71" />
+                    <LottieView
+                      autoPlay
+                      source={require("../52058-check.json")}
+                    />
+                  </View>
+
+                  <Text
+                    style={{
+                      alignItems: "center",
+                      marginVertical: 30,
+                      fontSize: 20,
+                      fontFamily: "OpanSans",
+                      textAlign: "center",
+                    }}
+                  >
+                    Document Uploded Successfully!
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </Modal>
+          <Dropdown
+            style={[
+              styles.dropdown,
+              isFocus && { borderColor: "blue" },
+              styles.space,
+            ]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            // inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={data}
+            maxHeight={250}
+            labelField="label"
+            valueField="value"
+            placeholder={!isFocus ? "Select Disease" : "..."}
+            // searchPlaceholder="Search..."
+            value={value}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            onChange={(item) => {
+              setValue(item.value);
+              setIsFocus(false);
+            }}
+            renderLeftIcon={() => (
+              <AntDesign
+                style={styles.icon}
+                color={isFocus ? "blue" : "black"}
+                name="Safety"
+                size={20}
+              />
+            )}
           />
-        )}
-      />
-      {value === "cholesterol" && (
-        <>
-          <View style={styles.space}>
-            <Text style={{ color: "#334b91" }}>Glycaemic C</Text>
+          {value === "cholesterol" && (
+            <>
+              <View style={styles.space}>
+                <Text style={{ color: "#334b91" }}>Glycaemic C</Text>
 
-            <TextInput
-              style={styles.textInput}
-              onChangeText={(txt) => {
-                setGlyC(txt);
-              }}
-            />
-          </View>
-          <View style={styles.space}>
-            <Text style={{ color: "#334b91" }}>Lipids</Text>
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(txt) => {
+                    setGlyC(txt);
+                  }}
+                />
+              </View>
+              <View style={styles.space}>
+                <Text style={{ color: "#334b91" }}>Lipids</Text>
 
-            <TextInput
-              style={styles.textInput}
-              onChangeText={(txt) => {
-                setLipids(txt);
-              }}
-            />
-          </View>
-          <View style={styles.space}>
-            <Text style={{ color: "#334b91" }}>HDL cholesterol</Text>
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(txt) => {
+                    setLipids(txt);
+                  }}
+                />
+              </View>
+              <View style={styles.space}>
+                <Text style={{ color: "#334b91" }}>HDL cholesterol</Text>
 
-            <TextInput
-              style={styles.textInput}
-              onChangeText={(txt) => {
-                setHC(txt);
-              }}
-            />
-          </View>
-          <View style={styles.space}>
-            <Text style={{ color: "#334b91" }}>LDL cholesterol</Text>
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(txt) => {
+                    setHC(txt);
+                  }}
+                />
+              </View>
+              <View style={styles.space}>
+                <Text style={{ color: "#334b91" }}>LDL cholesterol</Text>
 
-            <TextInput
-              style={styles.textInput}
-              onChangeText={(txt) => {
-                setLC(txt);
-              }}
-            />
-          </View>
-          <View style={styles.space}>
-            <Text style={{ color: "#334b91" }}>Blood Pressure</Text>
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(txt) => {
+                    setLC(txt);
+                  }}
+                />
+              </View>
+              <View style={styles.space}>
+                <Text style={{ color: "#334b91" }}>Blood Pressure</Text>
 
-            <TextInput
-              style={styles.textInput}
-              onChangeText={(txt) => {
-                setbp(txt);
-              }}
-            />
-          </View>
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(txt) => {
+                    setbp(txt);
+                  }}
+                />
+              </View>
+            </>
+          )}
+          {value === "dengue" && (
+            <>
+              <View style={styles.space}>
+                <Text style={{ color: "#334b91" }}>Leukocytes</Text>
+
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(txt) => {
+                    setLc(txt);
+                  }}
+                />
+              </View>
+              <View style={styles.space}>
+                <Text style={{ color: "#334b91" }}>Neutrophils</Text>
+
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(txt) => {
+                    setnp(txt);
+                  }}
+                />
+              </View>
+              <View style={styles.space}>
+                <Text style={{ color: "#334b91" }}>HDL cholesterol</Text>
+
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(txt) => {
+                    setHC(txt);
+                  }}
+                />
+              </View>
+              <View style={styles.space}>
+                <Text style={{ color: "#334b91" }}>Lymphocytes</Text>
+
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(txt) => {
+                    setlpc(txt);
+                  }}
+                />
+              </View>
+              <View style={styles.space}>
+                <Text style={{ color: "#334b91" }}>Red Blood cells</Text>
+
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(txt) => {
+                    setrbc(txt);
+                  }}
+                />
+              </View>
+              <View style={styles.space}>
+                <Text style={{ color: "#334b91" }}>Hemoglobin</Text>
+
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(txt) => {
+                    sethg(txt);
+                  }}
+                />
+              </View>
+            </>
+          )}
+          {value === "malaria" && (
+            <>
+              <View style={styles.space}>
+                <Text style={{ color: "#334b91" }}>WBC</Text>
+
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(txt) => {
+                    setwbc(txt);
+                  }}
+                />
+              </View>
+              <View style={styles.space}>
+                <Text style={{ color: "#334b91" }}>Haemoglobin</Text>
+
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(txt) => {
+                    sethg(txt);
+                  }}
+                />
+              </View>
+              <View style={styles.space}>
+                <Text style={{ color: "#334b91" }}>Platelets</Text>
+
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(txt) => {
+                    setPlate(txt);
+                  }}
+                />
+              </View>
+              <View style={styles.space}>
+                <Text style={{ color: "#334b91" }}>C-reactive protein</Text>
+
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(txt) => {
+                    setcrp(txt);
+                  }}
+                />
+              </View>
+              <View style={styles.space}>
+                <Text style={{ color: "#334b91" }}>PH</Text>
+
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(txt) => {
+                    setph(txt);
+                  }}
+                />
+              </View>
+            </>
+          )}
+          {value === "diabetes" && (
+            <>
+              <View style={styles.space}>
+                <Text style={{ color: "#334b91" }}>Urine glucose level</Text>
+
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(txt) => {
+                    setugl(txt);
+                  }}
+                />
+              </View>
+              <View style={styles.space}>
+                <Text style={{ color: "#334b91" }}>
+                  Fasting blood glucose level
+                </Text>
+
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(txt) => {
+                    setfbgl(txt);
+                  }}
+                />
+              </View>
+              <View style={styles.space}>
+                <Text style={{ color: "#334b91" }}>
+                  Random blood glucose level
+                </Text>
+
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(txt) => {
+                    setrbgl(txt);
+                  }}
+                />
+              </View>
+              <View style={styles.space}>
+                <Text style={{ color: "#334b91" }}>hbA1c</Text>
+
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(txt) => {
+                    sethbA1c(txt);
+                  }}
+                />
+              </View>
+            </>
+          )}
+          <TouchableOpacity
+            style={{
+              width: "100%",
+              height: 40,
+              backgroundColor: "#caf0f8",
+              marginTop: 35,
+              borderRadius: 15,
+              alignItems: "center",
+              justifyContent: "center",
+              color: "black",
+            }}
+            onPress={submit}
+          >
+            <Text style={{ color: "#000" }}>+ Add Documents</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{
+              width: "100%",
+              height: 40,
+              backgroundColor: "#caf0f8",
+              marginVertical: 35,
+              borderRadius: 15,
+              alignItems: "center",
+              justifyContent: "center",
+              color: "black",
+            }}
+            onPress={SendData}
+          >
+            <Text style={{ color: "black" }}>Submit</Text>
+          </TouchableOpacity>
         </>
       )}
-      {value === "dengue" && (
-        <>
-          <View style={styles.space}>
-            <Text style={{ color: "#334b91" }}>Leukocytes</Text>
 
-            <TextInput
-              style={styles.textInput}
-              onChangeText={(txt) => {
-                setLc(txt);
-              }}
-            />
-          </View>
-          <View style={styles.space}>
-            <Text style={{ color: "#334b91" }}>Neutrophils</Text>
-
-            <TextInput
-              style={styles.textInput}
-              onChangeText={(txt) => {
-                setnp(txt);
-              }}
-            />
-          </View>
-          <View style={styles.space}>
-            <Text style={{ color: "#334b91" }}>HDL cholesterol</Text>
-
-            <TextInput
-              style={styles.textInput}
-              onChangeText={(txt) => {
-                setHC(txt);
-              }}
-            />
-          </View>
-          <View style={styles.space}>
-            <Text style={{ color: "#334b91" }}>Lymphocytes</Text>
-
-            <TextInput
-              style={styles.textInput}
-              onChangeText={(txt) => {
-                setlpc(txt);
-              }}
-            />
-          </View>
-          <View style={styles.space}>
-            <Text style={{ color: "#334b91" }}>Red Blood cells</Text>
-
-            <TextInput
-              style={styles.textInput}
-              onChangeText={(txt) => {
-                setrbc(txt);
-              }}
-            />
-          </View>
-          <View style={styles.space}>
-            <Text style={{ color: "#334b91" }}>Hemoglobin</Text>
-
-            <TextInput
-              style={styles.textInput}
-              onChangeText={(txt) => {
-                sethg(txt);
-              }}
-            />
-          </View>
-        </>
+      {Load && (
+        <LottieView source={require("../8094-file-moving.json")} autoPlay />
       )}
-      {value === "malaria" && (
-        <>
-          <View style={styles.space}>
-            <Text style={{ color: "#334b91" }}>WBC</Text>
-
-            <TextInput
-              style={styles.textInput}
-              onChangeText={(txt) => {
-                setwbc(txt);
-              }}
-            />
-          </View>
-          <View style={styles.space}>
-            <Text style={{ color: "#334b91" }}>Haemoglobin</Text>
-
-            <TextInput
-              style={styles.textInput}
-              onChangeText={(txt) => {
-                sethg(txt);
-              }}
-            />
-          </View>
-          <View style={styles.space}>
-            <Text style={{ color: "#334b91" }}>Platelets</Text>
-
-            <TextInput
-              style={styles.textInput}
-              onChangeText={(txt) => {
-                setPlate(txt);
-              }}
-            />
-          </View>
-          <View style={styles.space}>
-            <Text style={{ color: "#334b91" }}>C-reactive protein</Text>
-
-            <TextInput
-              style={styles.textInput}
-              onChangeText={(txt) => {
-                setcrp(txt);
-              }}
-            />
-          </View>
-          <View style={styles.space}>
-            <Text style={{ color: "#334b91" }}>PH</Text>
-
-            <TextInput
-              style={styles.textInput}
-              onChangeText={(txt) => {
-                setph(txt);
-              }}
-            />
-          </View>
-        </>
-      )}
-      {value === "diabetes" && (
-        <>
-          <View style={styles.space}>
-            <Text style={{ color: "#334b91" }}>Urine glucose level</Text>
-
-            <TextInput
-              style={styles.textInput}
-              onChangeText={(txt) => {
-                setugl(txt);
-              }}
-            />
-          </View>
-          <View style={styles.space}>
-            <Text style={{ color: "#334b91" }}>
-              Fasting blood glucose level
-            </Text>
-
-            <TextInput
-              style={styles.textInput}
-              onChangeText={(txt) => {
-                setfbgl(txt);
-              }}
-            />
-          </View>
-          <View style={styles.space}>
-            <Text style={{ color: "#334b91" }}>Random blood glucose level</Text>
-
-            <TextInput
-              style={styles.textInput}
-              onChangeText={(txt) => {
-                setrbgl(txt);
-              }}
-            />
-          </View>
-          <View style={styles.space}>
-            <Text style={{ color: "#334b91" }}>hbA1c</Text>
-
-            <TextInput
-              style={styles.textInput}
-              onChangeText={(txt) => {
-                sethbA1c(txt);
-              }}
-            />
-          </View>
-        </>
-      )}
-      <TouchableOpacity
-        style={{
-          width: "100%",
-          height: 40,
-          backgroundColor: "#caf0f8",
-          marginTop: 35,
-          borderRadius: 15,
-          alignItems: "center",
-          justifyContent: "center",
-          color: "black",
-        }}
-        onPress={submit}
-      >
-        <Text style={{ color: "#000" }}>+ Add Documents</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={{
-          width: "100%",
-          height: 40,
-          backgroundColor: "#caf0f8",
-          marginVertical: 35,
-          borderRadius: 15,
-          alignItems: "center",
-          justifyContent: "center",
-          color: "black",
-        }}
-        onPress={SendData}
-      >
-        <Text style={{ color: "black" }}>Submit</Text>
-      </TouchableOpacity>
     </ScrollView>
   );
 };

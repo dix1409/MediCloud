@@ -21,9 +21,12 @@ import { Feather } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { auth, db, store } from "../Firebase/Firebase";
 import { doc, setDoc } from "firebase/firestore";
+import LottieView from "lottie-react-native";
 
 export default function Profile({ navigation, route }) {
   const [status, requestPermission] = ImagePicker.useCameraPermissions();
+  const [Load, setLoad] = useState(false);
+
   const [url, seturl] = useState("");
   const [image, setImage] = useState(null);
   const [visible, setVisible] = useState(false);
@@ -43,7 +46,7 @@ export default function Profile({ navigation, route }) {
       setshow(false);
     }
   };
-  const [load, setLoad] = useState(false);
+  // const [load, setload] = useState(false);
   const toggleBottomNavigationView = () => {
     //Toggling the visibility state of the bottom sheet
     setVisible(!visible);
@@ -135,6 +138,7 @@ export default function Profile({ navigation, route }) {
   };
   // console.log(blood);
   const submit = async () => {
+    setLoad(true);
     await setDoc(
       doc(
         db,
@@ -153,9 +157,11 @@ export default function Profile({ navigation, route }) {
     )
       .then(() => {
         console.log("yes");
+        setLoad(false);
         navigation.navigate("SeeProf");
       })
       .catch((err) => {
+        setLoad(false);
         console.log(err.message);
       });
   };
@@ -176,130 +182,138 @@ export default function Profile({ navigation, route }) {
     }
   };
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.circle}>
-        <TouchableOpacity onPress={toggleBottomNavigationView}>
-          {!image ? (
-            <FontAwesome5 name="camera-retro" size={40} color="black" />
-          ) : (
-            <ImageBackground
-              source={{ uri: image }}
-              style={{
-                width: 110,
-                height: 110,
-                borderRadius: 75,
-                overflow: "hidden",
-              }}
-            />
-          )}
-        </TouchableOpacity>
-      </View>
-      <BottomSheet
-        visible={visible}
-        //setting the visibility state of the bottom shee
-        onBackButtonPress={toggleBottomNavigationView}
-        //Toggling the visibility state on the click of the back botton
-        onBackdropPress={toggleBottomNavigationView}
-        //Toggling the visibility state on the clicking out side of the sheet
-      >
-        {/*Bottom Sheet inner View*/}
-        <View
-          style={{
-            backgroundColor: "#fff",
-            width: "100%",
-            height: 350,
-            borderTopStartRadius: 30,
-            borderTopEndRadius: 30,
-          }}
-        >
-          <View style={styles.panel}>
-            <View style={{ alignItems: "center" }}>
-              <Text style={styles.panelTitle}>Upload Photo</Text>
-              <Text style={styles.panelSubtitle}>
-                Choose Your Profile Picture
-              </Text>
-            </View>
-
-            <TouchableOpacity onPress={takePhotoFromCamera}>
-              <LinearGradient
-                style={styles.panelButton}
-                colors={["#caf0f8", "#caf0f8"]}
-              >
-                <Text style={styles.panelButtonTitle}>Take Photo</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={choosePhotoFromLibrary}>
-              <LinearGradient
-                style={styles.panelButton}
-                colors={["#caf0f8", "#caf0f8"]}
-              >
-                <Text style={styles.panelButtonTitle}>Choose From Library</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                toggleBottomNavigationView();
-                setImage(null);
-              }}
-            >
-              <LinearGradient
-                colors={["#caf0f8", "#caf0f8"]}
-                style={styles.panelButton}
-              >
-                <Text style={styles.panelButtonTitle}>Cancel</Text>
-              </LinearGradient>
+    <View style={styles.container}>
+      {!Load && (
+        <>
+          <View style={styles.circle}>
+            <TouchableOpacity onPress={toggleBottomNavigationView}>
+              {!image ? (
+                <FontAwesome5 name="camera-retro" size={40} color="black" />
+              ) : (
+                <ImageBackground
+                  source={{ uri: image }}
+                  style={{
+                    width: 110,
+                    height: 110,
+                    borderRadius: 75,
+                    overflow: "hidden",
+                  }}
+                />
+              )}
             </TouchableOpacity>
           </View>
-        </View>
-      </BottomSheet>
-      <View style={styles.space}>
-        <Text style={{ color: "#334b91" }}>Full Name</Text>
+          <BottomSheet
+            visible={visible}
+            //setting the visibility state of the bottom shee
+            onBackButtonPress={toggleBottomNavigationView}
+            //Toggling the visibility state on the click of the back botton
+            onBackdropPress={toggleBottomNavigationView}
+          >
+            {/*Bottom Sheet inner View*/}
+            <View
+              style={{
+                backgroundColor: "#fff",
+                width: "100%",
+                height: 350,
+                borderTopStartRadius: 30,
+                borderTopEndRadius: 30,
+              }}
+            >
+              <View style={styles.panel}>
+                <View style={{ alignItems: "center" }}>
+                  <Text style={styles.panelTitle}>Upload Photo</Text>
+                  <Text style={styles.panelSubtitle}>
+                    Choose Your Profile Picture
+                  </Text>
+                </View>
 
-        <TextInput
-          style={styles.textInput}
-          onChangeText={(txt) => {
-            setname(txt);
-          }}
-        />
-      </View>
-      <View style={styles.space}>
-        <Text style={{ color: "#334b91" }}>Email Address</Text>
+                <TouchableOpacity onPress={takePhotoFromCamera}>
+                  <LinearGradient
+                    style={styles.panelButton}
+                    colors={["#caf0f8", "#caf0f8"]}
+                  >
+                    <Text style={styles.panelButtonTitle}>Take Photo</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={choosePhotoFromLibrary}>
+                  <LinearGradient
+                    style={styles.panelButton}
+                    colors={["#caf0f8", "#caf0f8"]}
+                  >
+                    <Text style={styles.panelButtonTitle}>
+                      Choose From Library
+                    </Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    toggleBottomNavigationView();
+                    setImage(null);
+                  }}
+                >
+                  <LinearGradient
+                    colors={["#caf0f8", "#caf0f8"]}
+                    style={styles.panelButton}
+                  >
+                    <Text style={styles.panelButtonTitle}>Cancel</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </BottomSheet>
+          <View style={styles.space}>
+            <Text style={{ color: "#334b91" }}>Full Name</Text>
 
-        <TextInput
-          style={styles.textInput}
-          onChangeText={(txt) => {
-            setemail(txt);
-          }}
-          keyboardType="email-address"
-        />
-      </View>
-      <View style={styles.space}>
-        <Text style={{ color: "#334b91" }}>Blood Group</Text>
+            <TextInput
+              style={styles.textInput}
+              onChangeText={(txt) => {
+                setname(txt);
+              }}
+            />
+          </View>
+          <View style={styles.space}>
+            <Text style={{ color: "#334b91" }}>Email Address</Text>
 
-        <TextInput
-          style={styles.textInput}
-          onChangeText={(txt) => {
-            setBlood(txt);
-          }}
-        />
-      </View>
-      <View style={styles.space}>
-        <Text style={{ color: "#334b91" }}>Date Of Birth</Text>
+            <TextInput
+              style={styles.textInput}
+              onChangeText={(txt) => {
+                setemail(txt);
+              }}
+              keyboardType="email-address"
+            />
+          </View>
+          <View style={styles.space}>
+            <Text style={{ color: "#334b91" }}>Blood Group</Text>
 
-        <TextInput
-          style={styles.textInput}
-          onChangeText={(txt) => {
-            setbirth(txt);
-          }}
-        />
-      </View>
-      <TouchableOpacity
-        style={[styles.panelButton, { marginTop: 15 }]}
-        onPress={submit}
-      >
-        <Text>Submit</Text>
-      </TouchableOpacity>
-    </ScrollView>
+            <TextInput
+              style={styles.textInput}
+              onChangeText={(txt) => {
+                setBlood(txt);
+              }}
+            />
+          </View>
+          <View style={styles.space}>
+            <Text style={{ color: "#334b91" }}>Date Of Birth</Text>
+
+            <TextInput
+              style={styles.textInput}
+              onChangeText={(txt) => {
+                setbirth(txt);
+              }}
+            />
+          </View>
+          <TouchableOpacity
+            style={[styles.panelButton, { marginTop: 15 }]}
+            onPress={submit}
+          >
+            <Text>Submit</Text>
+          </TouchableOpacity>
+        </>
+      )}
+      {Load && (
+        <LottieView source={require("../person-profile.json")} autoPlay />
+      )}
+    </View>
   );
 }
 const styles = StyleSheet.create({
